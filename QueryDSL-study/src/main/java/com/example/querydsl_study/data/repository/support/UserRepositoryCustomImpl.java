@@ -3,11 +3,13 @@ package com.example.querydsl_study.data.repository.support;
 import com.example.querydsl_study.data.entity.QTeam;
 import com.example.querydsl_study.data.entity.QUser;
 import com.example.querydsl_study.data.entity.User;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -144,11 +146,12 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom{
                 .offset(pageable.getOffset())
                 .fetch();
 
-        long count = jpaQueryFactory.select(qUser)
+        JPQLQuery<Long> count = jpaQueryFactory
+                .select(qUser.count())
                 .from(qUser)
-                .where(qUser.age.between(20,29), qUser.team.name.eq("강한팀"))
-                .fetchCount();
-        return new PageImpl<>(userList,pageable,count);
+                .where(qUser.age.between(20,29), qUser.team.name.eq("강한팀"));
+
+        return PageableExecutionUtils.getPage(userList, pageable, count::fetchOne);
     }
 
     @Override
