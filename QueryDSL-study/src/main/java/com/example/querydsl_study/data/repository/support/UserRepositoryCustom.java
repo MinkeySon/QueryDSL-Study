@@ -89,4 +89,19 @@ public interface UserRepositoryCustom {
      * @return
      */
     Page<User> pageUsers(Pageable pageable);
+
+    /**
+     * 팀에 속한 유저들만 조회
+     * @param firstAge
+     * @param secondAge
+     * @return
+     */
+    List<User> getUsersJoinTeam(int firstAge, int secondAge);
+    /**
+     * 팀에 속하지 않은 유저들도 조회
+     * @param firstAge
+     * @param secondAge
+     * @return
+     */
+    List<User> getUsersLeftJoinTeam(int firstAge, int secondAge);
 }

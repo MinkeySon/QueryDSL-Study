@@ -1,5 +1,6 @@
 package com.example.querydsl_study.data.repository.support;
 
+import com.example.querydsl_study.data.entity.QTeam;
 import com.example.querydsl_study.data.entity.QUser;
 import com.example.querydsl_study.data.entity.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -148,5 +149,25 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom{
                 .where(qUser.age.between(20,29), qUser.team.name.eq("강한팀"))
                 .fetchCount();
         return new PageImpl<>(userList,pageable,count);
+    }
+
+    @Override
+    public List<User> getUsersJoinTeam(int firstAge, int secondAge) {
+        QUser qUser = QUser.user;
+        return jpaQueryFactory.select(qUser)
+                .from(qUser)
+                .where(qUser.age.between(firstAge, secondAge))
+                .join(qUser.team)
+                .fetch();
+    }
+
+    @Override
+    public List<User> getUsersLeftJoinTeam(int firstAge, int secondAge) {
+        QUser qUser = QUser.user;
+        return jpaQueryFactory.select(qUser)
+                .from(qUser)
+                .where(qUser.age.between(firstAge, secondAge))
+                .leftJoin(qUser.team)
+                .fetch();
     }
 }
