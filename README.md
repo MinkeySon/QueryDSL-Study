@@ -268,7 +268,7 @@ public static <T> Page<T> getPage(List<T> content, Pageable pageable, LongSuppli
                 .fetch();
     }
 ```
-**innerJoin**
+**leftJoin**
 ``` java
 public List<User> getUsersLeftJoinTeam(int firstAge, int secondAge) {
         QUser qUser = QUser.user;
